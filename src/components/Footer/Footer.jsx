@@ -1,33 +1,30 @@
-import { Box, Flex, Text, Link, Icon } from "@chakra-ui/react";
+import { Flex, Box, Link, Text } from "@chakra-ui/react";
 import { Github } from "lucide-react";
 
 function Footer() {
   return (
-    <Box as="footer" bg="gray.800" color="white" py={6} mt="auto">
-      <Flex 
-        direction={{ base: "column", md: "row" }} 
-        align="center" 
-        justify="space-between" 
-        maxW="1200px" 
-        mx="auto"
-      >
-        <Text mb={{ base: 4, md: 0 }} fontSize="sm" textAlign="center">
-          Copyright &copy; Abdullah Zeeshan {new Date().getFullYear()}
-        </Text>
-        <Link 
-          href="https://github.com/4bdullah7eeshan" 
-          isExternal 
+    <Flex
+      as="footer"
+      bg="gray.800"
+      color="white"
+      py={4}
+      px={8}
+      justify="space-between"
+      align="center"
+      mt="auto"
+    >
+      <Text>Copyright &copy; Abdullah Zeeshan 2024</Text>
+      <Box>
+        <Link
+          href="https://github.com/4bdullah7eeshan"
+          target="_blank"
+          rel="noopener noreferrer"
           aria-label="GitHub profile"
-          display="flex" 
-          alignItems="center" 
-          gap={2} 
-          _hover={{ color: "blue.400" }}
         >
-          <Icon as={Github} w={5} h={5} />
-          <Text>GitHub</Text>
+          <Github />
         </Link>
-      </Flex>
-    </Box>
+      </Box>
+    </Flex>
   );
 }
 
