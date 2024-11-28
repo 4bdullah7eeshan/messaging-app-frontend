@@ -12,7 +12,7 @@ const routes = [
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "", // This will match the root path
+        path: "/", // This will match the root path
         element: <App />, // Render App here if needed
       },
       {
