@@ -1,10 +1,8 @@
 import App from "./App";
-import Home from "./pages/Home";
-import Cart from "./pages/Cart";
+import SignUp from "./pages/SignUp";
 import ErrorPage from "./pages/ErrorPage";
 import Layout from "./components/Layout/Layout";
-import Product from "./pages/Product";
-import About from "./pages/About";
+
 import { element } from "prop-types";
 
 const routes = [
@@ -18,20 +16,8 @@ const routes = [
         element: <App />, // Render App here if needed
       },
       {
-        path: "products",
-        element: <Products />, // Render Products page here
-      },
-      {
-        path: "products/:productId",
-        element: <Product />,
-      },
-      {
-        path: "cart",
-        element: <Cart />, // Render Cart page here
-      },
-      {
-        path: "about",
-        element: <About />,
+        path: "sign_up",
+        element: <SignUp />,
       },
     ],
   },
