@@ -3,7 +3,7 @@ import { Github } from "lucide-react";
 
 function Footer() {
   return (
-    <Box as="footer" bg="gray.800" color="white" py={6} px={4}>
+    <Box as="footer" bg="gray.800" color="white" py={6} mt="auto">
       <Flex 
         direction={{ base: "column", md: "row" }} 
         align="center" 
@@ -14,7 +14,6 @@ function Footer() {
         <Text mb={{ base: 4, md: 0 }} fontSize="sm" textAlign="center">
           Copyright &copy; Abdullah Zeeshan {new Date().getFullYear()}
         </Text>
-
         <Link 
           href="https://github.com/4bdullah7eeshan" 
           isExternal 
