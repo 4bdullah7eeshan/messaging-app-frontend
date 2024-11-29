@@ -1,18 +1,26 @@
 import { Box, Flex, Spacer, Button, useBreakpointValue } from "@chakra-ui/react";
+import { ColorModeButton } from "../ui/color-mode";
 
 function Navbar() {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   return (
-    <Flex p={4} bg="blue.500" color="white" align="center">
-      <Box fontSize="lg" fontWeight="bold">Messaging App</Box>
+    <Flex p={4} align="center" borderBottom="1px solid" borderColor="gray.200" _dark={{ borderColor: "gray.700" }}>
+      <Box fontSize="lg" fontWeight="bold">
+        Messaging App
+      </Box>
       <Spacer />
       {isMobile ? (
-        <Button variant="outline" colorScheme="whiteAlpha">Menu</Button>
+        <Button variant="outline">Menu</Button>
       ) : (
         <>
-          <Button variant="outline" mr={2} colorScheme="whiteAlpha">Login</Button>
-          <Button colorScheme="whiteAlpha">Sign Up</Button>
+          <Button variant="ghost" mr={2}>
+            Login
+          </Button>
+          <Button variant="solid" mr={4}>
+            Sign Up
+          </Button>
+          <ColorModeButton />
         </>
       )}
     </Flex>
