@@ -7,7 +7,7 @@ function Signup() {
     password: "",
     confirmPassword: "",
   });
-  const [error, setError] = useState(null);
+  const [error, setError] = useState([]);
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
@@ -17,29 +17,36 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
+    setError([]);
     setSuccess(false);
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError(["Passwords do not match"]);
       return;
     }
 
+    
     try {
-      const response = await fetch("http://localhost:3000/sign_up", {
+      const response = await fetch("http://localhost:3000/auth/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        }),
+        body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Failed to sign up");
+        const data = await response.json();
+        console.log("Response data:", data);
+        console.log("FormData:", formData);
+console.log("Response status:", response.status);
+
+
+        if (data.errors) {
+          setError(data.errors); // This might be an array of objects
+        } else {
+          setError([data.message]); // Ensure this is wrapped in an array
+        }
       }
+      
 
       setSuccess(true);
       setFormData({
@@ -49,7 +56,7 @@ function Signup() {
         confirmPassword: "",
       });
     } catch (err) {
-      setError(err.message);
+      setError([err.message]);
     }
   };
 
@@ -59,16 +66,22 @@ function Signup() {
         <h1 className="text-2xl font-bold text-center text-gray-700 dark:text-gray-200">
           Sign Up
         </h1>
-        {error && <div className="mt-4 text-red-500 text-sm">{error}</div>}
+        {error && (
+  <ul className="mt-4 text-red-500 text-sm">
+    {Array.isArray(error)
+      ? error.map((err, index) => (
+          <li key={index}>{err.message || err}</li>
+        ))
+      : <li>{error}</li>}
+  </ul>
+)}
+
         {success && (
           <div className="mt-4 text-green-500 text-sm">
             Successfully signed up! You can now log in.
           </div>
         )}
-        <form
-          onSubmit={handleSubmit}
-          className="mt-6"
-        >
+        <form onSubmit={handleSubmit} className="mt-6">
           <fieldset className="flex flex-col gap-6">
             <legend className="text-gray-500 dark:text-gray-400 text-sm text-center">
               Join by entering the following details.
@@ -148,22 +161,11 @@ function Signup() {
           </fieldset>
           <button
             type="submit"
-            className="mt-6 w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+            className="mt-6 w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             Sign Up
           </button>
         </form>
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Already have an account?{" "}
-            <a
-              href="/sign_in"
-              className="text-blue-600 hover:underline dark:text-blue-400"
-            >
-              Sign In
-            </a>
-          </p>
-        </div>
       </div>
     </main>
   );

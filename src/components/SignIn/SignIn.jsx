@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 function SignIn() {
+  const { login } = useAuth(); // Importing login function from AuthContext
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -16,20 +18,21 @@ function SignIn() {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/sign_in", {
+      const response = await fetch("http://localhost:3000/auth/sign-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || "Invalid email or password");
+        const errorData = await response.text();
+        throw new Error(errorData || "Invalid email or password");
       }
 
-      localStorage.setItem("authToken", data.token);
-
-      navigate("/");
+      const data = await response.json();
+      localStorage.setItem("authToken", data.token); // Store token in localStorage
+      login(data.user); // Update context with user data
+      navigate("/"); // Redirect to homepage
     } catch (err) {
       setError(err.message);
     }
