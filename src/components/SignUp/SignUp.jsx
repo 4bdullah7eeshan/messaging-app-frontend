@@ -153,6 +153,17 @@ function Signup() {
             Sign Up
           </button>
         </form>
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Already have an account?{" "}
+            <a
+              href="/sign_in"
+              className="text-blue-600 hover:underline dark:text-blue-400"
+            >
+              Sign In
+            </a>
+          </p>
+        </div>
       </div>
     </main>
   );
