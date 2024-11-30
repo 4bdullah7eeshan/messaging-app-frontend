@@ -1,4 +1,5 @@
 import Profile from "../Profile/Profile";
+import Friends from "../Friends/Friends";
 
 function DynamicContent({ activeSection, setSelectedChat }) {
   if (activeSection === "messages") {
@@ -18,7 +19,7 @@ function DynamicContent({ activeSection, setSelectedChat }) {
   }
 
   if (activeSection === "friends") {
-    return <div>Friends List</div>;
+    return <Friends />;
   }
 
   if (activeSection === "explore") {
