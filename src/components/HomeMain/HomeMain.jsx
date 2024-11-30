@@ -1,17 +1,33 @@
+import { useState } from "react";
+import Sidebar from "../Sidebar/Sidebar";
+import DynamicContent from "../DynamicContent/DynamicContent";
+import ChatWindow from "../ChatWindow/ChatWindow";
 import { useAuth } from "../../contexts/AuthContext";
 
-function HomeMain() {
+function MainApp() {
+  const [activeSection, setActiveSection] = useState("messages"); // Default to messages
+  const [selectedChat, setSelectedChat] = useState(null); // Tracks selected chat
   const { user } = useAuth();
 
   return (
-    <main className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-700 dark:text-gray-200">
-          {user ? `Hello, ${user.username}` : "Welcome"}
-        </h1>
+    <div className="flex h-screen">
+      {/* Sidebar */}
+      <Sidebar setActiveSection={setActiveSection} />
+
+      {/* Middle Column */}
+      <div className="flex-1 border-r">
+        <DynamicContent
+          activeSection={activeSection}
+          setSelectedChat={setSelectedChat}
+        />
       </div>
-    </main>
+
+      {/* Right Column */}
+      <div className="flex-1">
+        <ChatWindow selectedChat={selectedChat} />
+      </div>
+    </div>
   );
 }
 
-export default HomeMain;
+export default MainApp;
