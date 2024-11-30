@@ -23,6 +23,7 @@ function DynamicContent({ activeSection, setSelectedChat }) {
     return <div>Explore Groups & People</div>;
   }
 
+
   return <div>Select an option from the sidebar.</div>;
 }
 
