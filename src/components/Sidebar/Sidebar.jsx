@@ -15,8 +15,10 @@ function Sidebar({ setActiveSection }) {
       </div>
 
       <div className="mt-auto flex flex-col items-center">
-        <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
-          {user.username[0].toUpperCase()}
+        <div
+          onClick={() => setActiveSection("profile")}
+          className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+            {user.username[0].toUpperCase()}
         </div>
       </div>
     </aside>

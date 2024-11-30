@@ -1,3 +1,5 @@
+import Profile from "../Profile/Profile";
+
 function DynamicContent({ activeSection, setSelectedChat }) {
   if (activeSection === "messages") {
     return (
@@ -23,6 +25,9 @@ function DynamicContent({ activeSection, setSelectedChat }) {
     return <div>Explore Groups & People</div>;
   }
 
+  if (activeSection === "profile") {
+    return <Profile />;
+  }
 
   return <div>Select an option from the sidebar.</div>;
 }
