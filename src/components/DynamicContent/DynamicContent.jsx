@@ -1,8 +1,9 @@
 import Profile from "../Profile/Profile";
 import Friends from "../Friends/Friends";
 import Conversations from "../Conversations/Conversations";
+import Explore from "../Explore/Explore";
 
-function DynamicContent({ activeSection, setSelectedChat }) {
+function DynamicContent({ activeSection, setSelectedChat, setSelectedProfile }) {
   if (activeSection === "messages") {
     return (
     //   <div>
@@ -25,7 +26,8 @@ function DynamicContent({ activeSection, setSelectedChat }) {
   }
 
   if (activeSection === "explore") {
-    return <div>Explore Groups & People</div>;
+    return <Explore setSelectedProfile={setSelectedProfile}
+    />;
   }
 
   if (activeSection === "profile") {
