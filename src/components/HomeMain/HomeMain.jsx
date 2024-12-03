@@ -1,32 +1,44 @@
 import { useState } from "react";
 import Sidebar from "../Sidebar/Sidebar";
-import DynamicContent from "../DynamicContent/DynamicContent";
-import ChatWindow from "../ChatWindow/ChatWindow";
-import { useAuth } from "../../contexts/AuthContext";
+import Left from "../Left/Left";
+import Right from "../Right/Right";
 
 function MainApp() {
-  const [activeSection, setActiveSection] = useState("messages"); // Default to messages
-  const [selectedChat, setSelectedChat] = useState(null); // Tracks selected chat
+  const [activeSection, setActiveSection] = useState("messages");
+  const [chatList, setChatList] = useState([]); // Maintain a list of chats
+  const [selectedChat, setSelectedChat] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null);
-  const { user } = useAuth();
+
+  // Add a new chat to the list and select it
+  const handleChatCreate = (newChat) => {
+    setChatList((prevChats) => [...prevChats, newChat]);
+    setSelectedChat(newChat);
+  };
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <Sidebar setActiveSection={setActiveSection} />
 
-      {/* Middle Column */}
       <div className="flex-1 border-r">
-        <DynamicContent
+        <Left
           activeSection={activeSection}
+          setChatList={setChatList}
           setSelectedChat={setSelectedChat}
           setSelectedProfile={setSelectedProfile}
+          selectedChat={selectedChat}
+
         />
       </div>
 
-      {/* Right Column */}
       <div className="flex-1">
-        <ChatWindow selectedChat={selectedChat} selectedProfile={selectedProfile} />
+        <Right
+          selectedChat={selectedChat}
+          selectedProfile={selectedProfile}
+          addChatToList={handleChatCreate}
+          setSelectedChat={setSelectedChat}
+          setActiveSection={setActiveSection}
+          chatList={chatList}
+        />
       </div>
     </div>
   );

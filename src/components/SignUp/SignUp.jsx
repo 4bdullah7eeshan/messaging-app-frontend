@@ -25,7 +25,6 @@ function Signup() {
       return;
     }
 
-    
     try {
       const response = await fetch("http://localhost:3000/auth/sign-up", {
         method: "POST",
@@ -37,16 +36,14 @@ function Signup() {
         const data = await response.json();
         console.log("Response data:", data);
         console.log("FormData:", formData);
-console.log("Response status:", response.status);
-
+        console.log("Response status:", response.status);
 
         if (data.errors) {
-          setError(data.errors); // This might be an array of objects
+          setError(data.errors);
         } else {
-          setError([data.message]); // Ensure this is wrapped in an array
+          setError([data.message]);
         }
       }
-      
 
       setSuccess(true);
       setFormData({
@@ -67,21 +64,26 @@ console.log("Response status:", response.status);
           Sign Up
         </h1>
         {error && (
-  <ul className="mt-4 text-red-500 text-sm">
-    {Array.isArray(error)
-      ? error.map((err, index) => (
-          <li key={index}>{err.message || err}</li>
-        ))
-      : <li>{error}</li>}
-  </ul>
-)}
+          <ul className="mt-4 text-red-500 text-sm">
+            {Array.isArray(error) ? (
+              error.map((err, index) => (
+                <li key={index}>{err.message || err}</li>
+              ))
+            ) : (
+              <li>{error}</li>
+            )}
+          </ul>
+        )}
 
         {success && (
           <div className="mt-4 text-green-500 text-sm">
             Successfully signed up! You can now log in.
           </div>
         )}
-        <form onSubmit={handleSubmit} className="mt-6">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-6"
+        >
           <fieldset className="flex flex-col gap-6">
             <legend className="text-gray-500 dark:text-gray-400 text-sm text-center">
               Join by entering the following details.

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
 function SignIn() {
-  const { login } = useAuth(); // Importing login function from AuthContext
+  const { login } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -30,9 +30,9 @@ function SignIn() {
       }
 
       const data = await response.json();
-      localStorage.setItem("authToken", data.token); // Store token in localStorage
-      login(data.user); // Update context with user data
-      navigate("/"); // Redirect to homepage
+      localStorage.setItem("authToken", data.token);
+      login(data.user);
+      navigate("/");
     } catch (err) {
       setError(err.message);
     }
@@ -45,7 +45,10 @@ function SignIn() {
           Sign In
         </h1>
         {error && <div className="mt-4 text-red-500 text-sm">{error}</div>}
-        <form onSubmit={handleSubmit} className="mt-6">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-6"
+        >
           <fieldset className="flex flex-col gap-6">
             <legend className="text-gray-500 dark:text-gray-400 text-sm text-center">
               Enter your credentials to log in.

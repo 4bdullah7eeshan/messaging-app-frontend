@@ -40,7 +40,7 @@ function Explore({ setSelectedProfile }) {
   };
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="p-4 space-y-6 overflow-auto">
       <div className="flex space-x-4 border-b border-gray-300 mb-6">
         <button
           onClick={() => handleTabChange("people")}
@@ -70,7 +70,7 @@ function Explore({ setSelectedProfile }) {
             <div
               key={user.id}
               className="p-2 hover:bg-gray-200 rounded cursor-pointer"
-              onClick={() => handleItemClick(user, "user")}
+              onClick={() => handleItemClick(user, "people")}
             >
               {user.username}
             </div>
