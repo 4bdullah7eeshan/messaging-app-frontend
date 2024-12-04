@@ -115,7 +115,7 @@ const ProfilePage = () => {
             {/* Avatar Section */}
             <div className="flex flex-col items-center">
               <img
-                src={avatarPreview || "default-avatar.png"}
+                src={avatarPreview || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
                 alt="User Avatar"
                 className="w-40 h-40 rounded-full object-cover shadow-lg"
               />

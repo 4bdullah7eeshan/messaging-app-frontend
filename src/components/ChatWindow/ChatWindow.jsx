@@ -92,7 +92,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
     <div className="h-full flex flex-col bg-white">
       <div className="flex items-center p-4 border-b bg-gray-100">
         <img
-          src={receiver.avatarUrl || "/default-avatar.png"}
+          src={receiver.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
           alt={`${receiver.username}'s avatar`}
           className="w-10 h-10 rounded-full object-cover mr-4"
         />

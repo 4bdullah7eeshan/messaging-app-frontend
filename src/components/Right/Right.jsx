@@ -102,7 +102,7 @@ function Right({
             <>
               <div className="flex justify-center">
                 <img
-                  src={item.avatarUrl || "/default-avatar.png"}
+                  src={item.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
                   alt={`${item.username}'s avatar`}
                   className="w-32 h-32 rounded-full shadow-md object-cover"
                 />
