@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Paperclip } from "lucide-react"; // Import the file icon
+import { Paperclip, X } from "lucide-react"; // Import the file icon
 
 function ChatWindow({ selectedChat, currentUserId }) {
   const [messages, setMessages] = useState([]);
@@ -121,6 +121,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
       );
       setMessages((prev) => [...prev, response.data.message]);
       setNewMessage("");
+      setFilePreview(null);
     } catch (error) {
       console.error(
         "Error sending message:",
@@ -214,7 +215,19 @@ function ChatWindow({ selectedChat, currentUserId }) {
         </div>
         {/* File preview container */}
         {filePreview && (
-          <div className="mt-4">
+          <div className="mt-4 relative">
+            <button
+              onClick={() => {
+                setFile(null);
+                setFilePreview(null);
+              }}
+              className="absolute top-0 right-0 p-1 bg-gray-200 rounded-full hover:bg-gray-300"
+            >
+              <X
+                size={20}
+                className="text-gray-600"
+              />
+            </button>
             {filePreview.type === "image" ? (
               <img
                 src={filePreview.url}
