@@ -25,10 +25,13 @@ function Sidebar({ setActiveSection }) {
       <div className="mt-auto flex flex-col items-center">
         <div
           onClick={() => setActiveSection("profile")}
-          className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center"
+          className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center overflow-hidden"
         >
-          {user.username[0].toUpperCase()}
-        </div>
+        <img
+            src={user.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"} // Fallback to default
+            alt={`${user.username}'s profile`}
+            className="w-full h-full object-cover"
+            />        </div>
       </div>
     </aside>
   );
