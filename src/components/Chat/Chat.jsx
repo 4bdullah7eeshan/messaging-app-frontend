@@ -20,9 +20,9 @@ function Chat({ setSelectedChat, setChatList }) {
             },
           }
         );
-        console.log(response.data.chats); // Check the structure of the response
-        setChats(response.data.chats);
-        setChatList(response.data.chats);
+        const validChats = response.data.chats.filter((chat) => chat.receiver); // Remove invalid chats
+    setChats(validChats);
+    setChatList(validChats);
       } catch (error) {
         console.error("Error fetching chats:", error);
       }
@@ -34,6 +34,7 @@ function Chat({ setSelectedChat, setChatList }) {
   // Filter chats based on the search term
   const filteredChats = chats.filter(
     (chat) =>
+      chat.receiver &&
       chat.receiver.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (chat.receiver.displayName &&
         chat.receiver.displayName
@@ -65,10 +66,10 @@ function Chat({ setSelectedChat, setChatList }) {
             <div className="flex-shrink-0">
               <img
                 src={
-                  chat.receiver.avatarUrl ||
+                  chat.receiver?.avatarUrl ||
                   "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"
                 }
-                alt={`${chat.receiver.username}'s avatar`}
+                alt={`${chat.receiver?.username || "Unknown User"}'s avatar`}
                 className="w-12 h-12 rounded-full object-cover"
               />
             </div>

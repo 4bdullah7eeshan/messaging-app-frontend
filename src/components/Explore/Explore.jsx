@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
+
 
 function Explore({ setSelectedProfile }) {
   const [activeTab, setActiveTab] = useState("people");
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
+  const { user: authUser } = useAuth();
+  const userId = authUser.id;
+
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -66,7 +72,9 @@ function Explore({ setSelectedProfile }) {
 
       {activeTab === "people" ? (
         <div className="flex-1 overflow-y-auto">
-          {users.map((user) => (
+          {users
+          .filter((user) => user.id !== userId)
+          .map((user) => (
             <div
               key={user.id}
               className="p-2 hover:bg-gray-200 rounded cursor-pointer"
