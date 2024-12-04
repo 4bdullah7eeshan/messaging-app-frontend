@@ -9,26 +9,26 @@ import { element } from "prop-types";
 
 const routes = [
   {
+    path: "/", // This will match the root path
+    element: (
+      <ProtectedRoute>
+        <App />
+      </ProtectedRoute>
+    ), // Render App here if needed
+  },
+  {
     path: "/",
     element: <Layout />, // Use the layout here
     errorElement: <ErrorPage />,
     children: [
-      {
-        path: "/", // This will match the root path
-        element: (
-          <ProtectedRoute>
-          <App />
-        </ProtectedRoute>
-        ), // Render App here if needed
-      },
       {
         path: "sign_up",
         element: <SignUp />,
       },
       {
         path: "sign_in",
-        element: <SignIn />
-      }
+        element: <SignIn />,
+      },
     ],
   },
 ];
