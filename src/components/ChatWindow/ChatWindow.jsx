@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Paperclip, X } from "lucide-react"; // Import the file icon
+import { Paperclip, X } from "lucide-react";
+import ChatMessages from "../ChatMessages/ChatMessages";
 
 function ChatWindow({ selectedChat, currentUserId }) {
   const [messages, setMessages] = useState([]);
@@ -9,13 +10,15 @@ function ChatWindow({ selectedChat, currentUserId }) {
   const answer = selectedChat?.id;
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
-  const [isSending, setIsSending] = useState(false); // Track loading state
-
+  const [isSending, setIsSending] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(false);
 
   useEffect(() => {
     if (!selectedChat) return;
 
     const fetchMessages = async () => {
+      setLoadingMessages(true); // Start loading when fetching messages
+
       try {
         const response = await axios.get(
           `http://localhost:3000/chats/m/${answer}`,
@@ -31,6 +34,8 @@ function ChatWindow({ selectedChat, currentUserId }) {
           "Error fetching messages:",
           error.response?.data || error.message
         );
+      } finally {
+        setLoadingMessages(false); // End loading once messages are fetched
       }
     };
 
@@ -103,7 +108,6 @@ function ChatWindow({ selectedChat, currentUserId }) {
 
     setIsSending(true); // Set loading state to true when message is being sent
 
-
     let imageUrl = null;
 
     const formData = new FormData();
@@ -161,7 +165,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
         </h3>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, idx) => (
           <div
             key={idx}
@@ -194,7 +198,35 @@ function ChatWindow({ selectedChat, currentUserId }) {
             </div>
           </div>
         ))}
-      </div>
+
+        {/* Loader after the last message */}
+        {/* {loadingMessages && (
+          <div className="flex justify-center items-center py-4">
+            <svg
+              className="animate-spin h-6 w-6 text-gray-500"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 1116 0A8 8 0 014 12z"
+              ></path>
+            </svg>
+            <span className="ml-2 text-gray-500">Loading...</span>
+          </div>
+        )}
+      </div> */}
+      <ChatMessages messages={messages} currentUserId={currentUserId}/>
 
       <div className="border-t p-4 bg-gray-50">
         <div className="flex items-center">
@@ -219,34 +251,34 @@ function ChatWindow({ selectedChat, currentUserId }) {
             rows="1"
           ></textarea>
           <button
-    onClick={sendMessage}
-    className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
-  >
-    {isSending ? (
-      <svg
-        className="animate-spin h-5 w-5 text-white"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          className="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-        ></circle>
-        <path
-          className="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 1116 0A8 8 0 014 12z"
-        ></path>
-      </svg>
-    ) : (
-      "Send"
-    )}
-  </button>
+            onClick={sendMessage}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
+          >
+            {isSending ? (
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 1116 0A8 8 0 014 12z"
+                ></path>
+              </svg>
+            ) : (
+              "Send"
+            )}
+          </button>
         </div>
         {/* File preview container */}
         {filePreview && (
