@@ -40,7 +40,7 @@ function Explore({ setSelectedProfile }) {
   };
 
   return (
-    <div className="p-4 space-y-6 overflow-auto">
+    <div className="h-full flex flex-col p-4">
       <div className="flex space-x-4 border-b border-gray-300 mb-6">
         <button
           onClick={() => handleTabChange("people")}
@@ -65,7 +65,7 @@ function Explore({ setSelectedProfile }) {
       </div>
 
       {activeTab === "people" ? (
-        <div className="space-y-2">
+        <div className="flex-1 overflow-y-auto">
           {users.map((user) => (
             <div
               key={user.id}
