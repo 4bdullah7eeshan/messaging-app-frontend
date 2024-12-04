@@ -169,7 +169,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
                 <img
                   src={message.imageUrl}
                   alt="Message Attachment"
-                  className="w-32 h-32 object-cover rounded-md"
+                  className="w-full h-auto max-w-xs object-cover rounded-md"
                 />
               )}
 
@@ -237,7 +237,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
               <img
                 src={filePreview.url}
                 alt="File preview"
-                className="w-32 h-32 object-cover rounded-md mx-auto"
+                className="w-32 h-auto max-w-xs object-cover rounded-md mx-auto"
               />
             ) : (
               <div className="flex items-center justify-center">
