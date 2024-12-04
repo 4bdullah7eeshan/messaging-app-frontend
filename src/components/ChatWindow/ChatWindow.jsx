@@ -164,22 +164,27 @@ function ChatWindow({ selectedChat, currentUserId }) {
                 : "justify-start"
             }`}
           >
-            <div
-              className={`max-w-xs px-4 py-2 rounded-lg shadow ${
-                message.senderId === currentUserId
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-800"
-              }`}
-            >
-              {message.content}
+            <div className="flex flex-col items-start space-y-2">
+              {message.imageUrl && (
+                <img
+                  src={message.imageUrl}
+                  alt="Message Attachment"
+                  className="w-32 h-32 object-cover rounded-md"
+                />
+              )}
+
+              {message.content.trim() && (
+                <div
+                  className={`px-4 py-2 rounded-lg shadow ${
+                    message.senderId === currentUserId
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 text-gray-800"
+                  }`}
+                >
+                  {message.content}
+                </div>
+              )}
             </div>
-            {message.imageUrl && (
-              <img
-                src={message.imageUrl}
-                alt="Message Attachment"
-                className="w-32 h-32 object-cover rounded-md mt-2"
-              />
-            )}
           </div>
         ))}
       </div>
