@@ -31,6 +31,7 @@ function SignIn() {
 
       const data = await response.json();
       localStorage.setItem("authToken", data.token);
+      console.log(data.token);
       login(data.user);
       navigate("/");
     } catch (err) {
