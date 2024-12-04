@@ -9,6 +9,8 @@ function ChatWindow({ selectedChat, currentUserId }) {
   const answer = selectedChat?.id;
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
+  const [isSending, setIsSending] = useState(false); // Track loading state
+
 
   useEffect(() => {
     if (!selectedChat) return;
@@ -99,6 +101,9 @@ function ChatWindow({ selectedChat, currentUserId }) {
   const sendMessage = async () => {
     if (!newMessage.trim() && !file) return;
 
+    setIsSending(true); // Set loading state to true when message is being sent
+
+
     let imageUrl = null;
 
     const formData = new FormData();
@@ -127,6 +132,8 @@ function ChatWindow({ selectedChat, currentUserId }) {
         "Error sending message:",
         error.response?.data || error.message
       );
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -212,11 +219,34 @@ function ChatWindow({ selectedChat, currentUserId }) {
             rows="1"
           ></textarea>
           <button
-            onClick={sendMessage}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
-          >
-            Send
-          </button>
+    onClick={sendMessage}
+    className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
+  >
+    {isSending ? (
+      <svg
+        className="animate-spin h-5 w-5 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 1116 0A8 8 0 014 12z"
+        ></path>
+      </svg>
+    ) : (
+      "Send"
+    )}
+  </button>
         </div>
         {/* File preview container */}
         {filePreview && (
