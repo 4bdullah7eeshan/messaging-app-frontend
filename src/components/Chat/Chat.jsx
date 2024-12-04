@@ -64,7 +64,10 @@ function Chat({ setSelectedChat, setChatList }) {
           >
             <div className="flex-shrink-0">
               <img
-                src={chat.receiver.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
+                src={
+                  chat.receiver.avatarUrl ||
+                  "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"
+                }
                 alt={`${chat.receiver.username}'s avatar`}
                 className="w-12 h-12 rounded-full object-cover"
               />
@@ -75,11 +78,12 @@ function Chat({ setSelectedChat, setChatList }) {
                 {chat.receiver.displayName || chat.receiver.username}
               </h3>
               <p className="text-sm text-gray-600 truncate">
-  {chat.lastMessage?.senderId === authUser.id
-    ? `You: ${chat.lastMessage.content}`
-    : chat.lastMessage?.content || "No messages yet"}
-</p>
-
+                {chat.lastMessage
+                  ? chat.lastMessage.senderId === authUser.id
+                    ? `You: ${chat.lastMessage.content || "Sent a file"}`
+                    : chat.lastMessage.content || "Sent a file"
+                  : "No messages yet"}
+              </p>
             </div>
 
             <div className="flex-shrink-0 ml-4 text-sm text-gray-500">
