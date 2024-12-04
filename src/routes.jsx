@@ -3,6 +3,7 @@ import SignUp from "./pages/SignUp";
 import ErrorPage from "./pages/ErrorPage";
 import Layout from "./components/Layout/Layout";
 import SignIn from "./pages/SignIn";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 import { element } from "prop-types";
 
@@ -14,7 +15,11 @@ const routes = [
     children: [
       {
         path: "/", // This will match the root path
-        element: <App />, // Render App here if needed
+        element: (
+          <ProtectedRoute>
+          <App />
+        </ProtectedRoute>
+        ), // Render App here if needed
       },
       {
         path: "sign_up",
