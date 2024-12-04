@@ -75,8 +75,11 @@ function Chat({ setSelectedChat, setChatList }) {
                 {chat.receiver.displayName || chat.receiver.username}
               </h3>
               <p className="text-sm text-gray-600 truncate">
-                {chat.lastMessage}
-              </p>
+  {chat.lastMessage?.senderId === authUser.id
+    ? `You: ${chat.lastMessage.content}`
+    : chat.lastMessage?.content || "No messages yet"}
+</p>
+
             </div>
 
             <div className="flex-shrink-0 ml-4 text-sm text-gray-500">
