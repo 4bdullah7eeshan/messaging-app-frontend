@@ -5,6 +5,10 @@ import { useAuth } from "../../contexts/AuthContext";
 function Sidebar({ setActiveSection }) {
   const { logout, user } = useAuth();
 
+  const handleLogout = async () => {
+    await logout();
+};
+
   return (
     <aside className="w-1/10 bg-gray-800 text-white flex flex-col items-center p-5">
       <div className="flex flex-col space-y-6 flex-grow">
@@ -17,7 +21,7 @@ function Sidebar({ setActiveSection }) {
         <button onClick={() => setActiveSection("explore")}>
           <Telescope />
         </button>
-        <button onClick={() => logout()}>
+        <button onClick={handleLogout}>
           <LogOut />
         </button>
       </div>

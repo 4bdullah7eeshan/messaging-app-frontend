@@ -55,10 +55,31 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
+  const logout = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      console.log(token);
+
+      if (token) {
+        const response = await fetch("http://localhost:3000/auth/sign-out", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Logout failed on the server.");
+        }
+      }
+
+      setUser(null);
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   return (
