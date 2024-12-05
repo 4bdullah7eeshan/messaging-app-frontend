@@ -7,6 +7,8 @@ const Friends = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("friends");
+  const [loadingFriends, setLoadingFriends] = useState(false);
+  const [loadingRequests, setLoadingRequests] = useState(false);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -52,8 +54,11 @@ const Friends = () => {
       }
     };
 
-    fetchFriends();
-    fetchFriendRequests();
+    Promise.all([fetchFriends(), fetchFriendRequests()])
+    .finally(() => {
+      setLoadingFriends(false);
+      setLoadingRequests(false);
+    });
   }, []);
 
   const handleAcceptRequest = async (requestId) => {
@@ -104,6 +109,29 @@ const Friends = () => {
       console.error(err);
     }
   };
+
+  const handleCancelRequest = async (requestId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/friend_requests/${requestId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      if (!response.ok) throw new Error("Failed to cancel the friend request");
+      const updatedRequests = outgoingRequests.filter(
+        (request) => request.id !== requestId
+      );
+      setOutgoingRequests(updatedRequests);
+    } catch (err) {
+      setError("Error canceling the friend request.");
+      console.error(err);
+    }
+  };
+  
 
   return (
     <div className="p-4 space-y-6">
@@ -230,7 +258,7 @@ const Friends = () => {
                         <span className="text-lg">{request.friend.username}</span>
                       </div>
                       <div className="space-x-2">
-                        <button className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                        <button onClick={() => handleCancelRequest(request.id)} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
                           Cancel Request
                         </button>
                       </div>
