@@ -17,6 +17,8 @@ function Right({
 
   const [isChatActive, setIsChatActive] = useState(false);
   const [shouldUpdateProfile, setShouldUpdateProfile] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
+  const [friendRequestSent, setFriendRequestSent] = useState(false);
 
   useEffect(() => {
     if (selectedChat) {
@@ -31,6 +33,29 @@ function Right({
       setIsChatActive(false);
     }
   }, [selectedProfile]);
+
+  useEffect(() => {
+    const checkFriendshipStatus = async () => {
+      if (!item || !item.id) return;
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/friends/u/f/${item.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          }
+        );
+
+        setIsFriend(response.data.isFriend);
+      } catch (error) {
+        console.error("Error checking friendship status:", error);
+      }
+    };
+
+    checkFriendshipStatus();
+  }, [item]);
 
   const handleStartChat = async () => {
     console.log("handleStartChat triggered");
@@ -76,6 +101,23 @@ function Right({
     }
   };
 
+  const handleSendFriendRequest = async () => {
+    try {
+      await axios.post(
+        `http://localhost:3000/friend_requests/send/${item.id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      setFriendRequestSent(true);
+    } catch (error) {
+      console.error("Error sending friend request:", error);
+    }
+  };
+
   if (isChatActive && selectedChat) {
     return (
       <ChatWindow
@@ -102,15 +144,97 @@ function Right({
             <>
               <div className="flex justify-center">
                 <img
-                  src={item.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
+                  src={
+                    item.avatarUrl ||
+                    "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"
+                  }
                   alt={`${item.username}'s avatar`}
                   className="w-32 h-32 rounded-full shadow-md object-cover"
                 />
               </div>
               <div className="mt-4 text-center">
-                <h3 className="text-xl font-bold">
-                  {item.displayName || item.username}
-                </h3>
+                <h3 className="text-xl font-bold">{item.username}</h3>
+                {isFriend ? (
+                  <div>
+                    <p className="text-gray-600 mt-2">You are friends</p>
+                    <div className="bg-gray-100 p-4 rounded-lg shadow-md mt-4 space-y-4">
+                      {/* Display Name */}
+                      <div className="text-left">
+                        <span className="font-medium text-gray-800">
+                          Display Name:
+                        </span>{" "}
+                        <span className="text-gray-600">
+                          {item.displayName || "No display name provided"}
+                        </span>
+                      </div>
+
+                      {/* Email */}
+                      <div className="text-left">
+                        <span className="font-medium text-gray-800">
+                          Email:
+                        </span>{" "}
+                        <span className="text-gray-600">
+                          {item.email || "No email available"}
+                        </span>
+                      </div>
+
+                      {/* Bio */}
+                      <div className="text-left">
+                        <span className="font-medium text-gray-800">Bio:</span>{" "}
+                        <span className="text-gray-600">
+                          {item.bio || "This user has not set a bio"}
+                        </span>
+                      </div>
+
+                      {/* Online Status */}
+                      <div className="text-left">
+                        <span className="font-medium text-gray-800">
+                          Status:
+                        </span>{" "}
+                        <span
+                          className={`${
+                            item.isOnline ? "text-green-600" : "text-red-600"
+                          } font-semibold`}
+                        >
+                          {item.isOnline ? "Online" : "Offline"}
+                        </span>
+                      </div>
+
+                      {/* Account Creation Date */}
+                      <div className="text-left">
+                        <span className="font-medium text-gray-800">
+                          Joined:
+                        </span>{" "}
+                        <span className="text-gray-600">
+                          {item.createdAt
+                            ? new Date(item.createdAt).toLocaleDateString()
+                            : "Join date unavailable"}
+                        </span>
+                      </div>
+
+                      {/* Friends Count */}
+                      <div className="text-left">
+                        <span className="font-medium text-gray-800">
+                          Friends:
+                        </span>{" "}
+                        <span className="text-gray-600">
+                          {item.friends?.length > 0
+                            ? `${item.friends.length} friend(s)`
+                            : "No friends to display"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ) : friendRequestSent ? (
+                  <p className="text-gray-600 mt-2">Friend request sent!</p>
+                ) : (
+                  <button
+                    onClick={handleSendFriendRequest}
+                    className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
+                  >
+                    Send Friend Request
+                  </button>
+                )}
               </div>
             </>
           );

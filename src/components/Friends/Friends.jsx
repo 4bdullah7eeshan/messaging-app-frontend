@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
@@ -9,12 +11,18 @@ const Friends = () => {
   const [activeTab, setActiveTab] = useState("friends");
   const [loadingFriends, setLoadingFriends] = useState(false);
   const [loadingRequests, setLoadingRequests] = useState(false);
+  const { user: authUser } = useAuth();
+  const userId = authUser.id;
+
 
   useEffect(() => {
     const fetchFriends = async () => {
       try {
         setLoading(true);
-        const friendsResponse = await fetch("http://localhost:3000/friends", {
+        const friendsResponse = await fetch(
+          `http://localhost:3000/friends/u/:userId`, 
+          
+          {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
@@ -34,7 +42,7 @@ const Friends = () => {
       try {
         setLoading(true);
         const requestsResponse = await fetch(
-          "http://localhost:3000/friend_requests",
+          `http://localhost:3000/friend_requests/user/:userId`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -44,6 +52,7 @@ const Friends = () => {
         if (!requestsResponse.ok)
           throw new Error("Failed to fetch friend requests");
         const requestsData = await requestsResponse.json();
+        console.log(requestsData);
         setIncomingRequests(requestsData.incomingRequests);
         setOutgoingRequests(requestsData.outgoingRequests);
       } catch (err) {
@@ -64,12 +73,11 @@ const Friends = () => {
   const handleAcceptRequest = async (requestId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/friend_requests/${requestId}/accept`,
+        `http://localhost:3000/friend_requests/accept/${requestId}`,
         {
-          method: "POST",
+          method: "PATCH",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
           },
         }
       );
@@ -91,7 +99,7 @@ const Friends = () => {
   const handleRejectRequest = async (requestId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/friend_requests/${requestId}/reject`,
+        `http://localhost:3000/friend_requests/reject/${requestId}`,
         {
           method: "DELETE",
           headers: {
@@ -113,7 +121,7 @@ const Friends = () => {
   const handleCancelRequest = async (requestId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/friend_requests/${requestId}`,
+        `http://localhost:3000/friend_requests/send/${requestId}`,
         {
           method: "DELETE",
           headers: {
@@ -183,7 +191,7 @@ const Friends = () => {
                       alt={`${friend.displayName}'s avatar`}
                       className="w-12 h-12 rounded-full"
                     />
-                    <span className="text-lg">{friend.displayName}</span>
+                    <span className="text-lg">{friend.username}</span>
                   </li>
                 ))}
               </ul>
