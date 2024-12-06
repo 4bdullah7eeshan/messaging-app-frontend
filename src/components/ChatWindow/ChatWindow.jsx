@@ -140,6 +140,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
       );
       setMessages((prev) => [...prev, response.data.message]);
       setNewMessage("");
+      setFile(null);
       setFilePreview(null);
     } catch (error) {
       console.error(
