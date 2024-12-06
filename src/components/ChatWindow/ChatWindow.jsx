@@ -12,6 +12,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
   const [filePreview, setFilePreview] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(false);
+  const MAX_FILE_SIZE = 500 * 1024; // 0.5 MB (500kB)
 
   useEffect(() => {
     if (!selectedChat) return;
@@ -79,6 +80,15 @@ function ChatWindow({ selectedChat, currentUserId }) {
     const file = e.target.files[0];
 
     if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        setFilePreview({
+          type: "error",
+          message: "File size exceeds the 1MB limit.",
+        });
+        setFile(null); // Clear the file
+        return;
+      }
+
       setFile(file);
       // Handle image file preview
       if (file.type.startsWith("image/")) {
@@ -200,7 +210,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
         ))}
 
         {/* Loader after the last message */}
-        {/* {loadingMessages && (
+      {/* {loadingMessages && (
           <div className="flex justify-center items-center py-4">
             <svg
               className="animate-spin h-6 w-6 text-gray-500"
@@ -226,7 +236,10 @@ function ChatWindow({ selectedChat, currentUserId }) {
           </div>
         )}
       </div> */}
-      <ChatMessages messages={messages} currentUserId={currentUserId}/>
+      <ChatMessages
+        messages={messages}
+        currentUserId={currentUserId}
+      />
 
       <div className="border-t p-4 bg-gray-50">
         <div className="flex items-center">
@@ -283,32 +296,40 @@ function ChatWindow({ selectedChat, currentUserId }) {
         {/* File preview container */}
         {filePreview && (
           <div className="mt-4 relative">
-            <button
-              onClick={() => {
-                setFile(null);
-                setFilePreview(null);
-              }}
-              className="absolute top-0 right-0 p-1 bg-gray-200 rounded-full hover:bg-gray-300"
-            >
-              <X
-                size={20}
-                className="text-gray-600"
-              />
-            </button>
-            {filePreview.type === "image" ? (
-              <img
-                src={filePreview.url}
-                alt="File preview"
-                className="w-32 h-auto max-w-xs object-cover rounded-md mx-auto"
-              />
-            ) : (
-              <div className="flex items-center justify-center">
-                <div className="bg-gray-200 p-2 rounded-md shadow-md">
-                  <span className="text-gray-500">
-                    Document: {filePreview.name}
-                  </span>
-                </div>
+            {filePreview.type === "error" ? (
+              <div className="bg-red-200 p-2 rounded-md shadow-md text-red-600">
+                {filePreview.message}
               </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    setFile(null);
+                    setFilePreview(null);
+                  }}
+                  className="absolute top-0 right-0 p-1 bg-gray-200 rounded-full hover:bg-gray-300"
+                >
+                  <X
+                    size={20}
+                    className="text-gray-600"
+                  />
+                </button>
+                {filePreview.type === "image" ? (
+                  <img
+                    src={filePreview.url}
+                    alt="File preview"
+                    className="w-32 h-auto max-w-xs object-cover rounded-md mx-auto"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <div className="bg-gray-200 p-2 rounded-md shadow-md">
+                      <span className="text-gray-500">
+                        Document: {filePreview.name}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}
