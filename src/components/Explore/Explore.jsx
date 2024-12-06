@@ -11,9 +11,6 @@ function Explore({ setSelectedProfile }) {
   const userId = authUser.id;
   const [friendIds, setFriendIds] = useState([]); // Store friend IDs
 
-
-
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -108,8 +105,8 @@ function Explore({ setSelectedProfile }) {
           ))}
         </div>
       ) : (
-        <div className="space-y-2">
-          {groups.map((group) => (
+        <div className="flex-1 flex items-center justify-center text-gray-500 text-lg">
+          {/* {groups.map((group) => (
             <div
               key={group.id}
               className="p-2 hover:bg-gray-200 rounded cursor-pointer"
@@ -117,7 +114,8 @@ function Explore({ setSelectedProfile }) {
             >
               {group.name}
             </div>
-          ))}
+          ))} */}
+          This feature is not yet available.
         </div>
       )}
     </div>
