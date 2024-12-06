@@ -266,7 +266,12 @@ function ChatWindow({ selectedChat, currentUserId }) {
           ></textarea>
           <button
             onClick={sendMessage}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
+            className={`px-4 py-2 rounded-lg shadow ${
+              newMessage.trim() || file
+                ? "bg-blue-500 text-white hover:bg-blue-600"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+            disabled={!(newMessage.trim() || file)}
           >
             {isSending ? (
               <svg
