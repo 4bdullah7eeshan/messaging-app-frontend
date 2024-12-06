@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Paperclip, X } from "lucide-react";
+import { Paperclip, X, SendHorizontal } from "lucide-react";
 import ChatMessages from "../ChatMessages/ChatMessages";
 
 function ChatWindow({ selectedChat, currentUserId }) {
@@ -295,7 +295,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
                 ></path>
               </svg>
             ) : (
-              "Send"
+              <SendHorizontal />
             )}
           </button>
         </div>
