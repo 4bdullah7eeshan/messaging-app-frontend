@@ -19,7 +19,7 @@ function Left({
   }
 
   if (activeSection === "friends") {
-    return <Friends />;
+    return <Friends setSelectedProfile={setSelectedProfile} />;
   }
 
   if (activeSection === "explore") {

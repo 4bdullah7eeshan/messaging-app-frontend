@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 
 
-const Friends = () => {
+const Friends = ({ setSelectedProfile }) => {
   const [friends, setFriends] = useState([]);
   const [incomingRequests, setIncomingRequests] = useState([]);
   const [outgoingRequests, setOutgoingRequests] = useState([]);
@@ -139,6 +139,10 @@ const Friends = () => {
       console.error(err);
     }
   };
+
+  const handleFriendClick = (item, type) => {
+    setSelectedProfile({ item, type });
+  };
   
 
   return (
@@ -185,13 +189,15 @@ const Friends = () => {
               <h2 className="text-xl font-semibold text-gray-800">Your Friends</h2>
               <ul className="space-y-4">
                 {friends.map((friend) => (
-                  <li key={friend.id} className="flex items-center space-x-4">
+                  <li key={friend.id} className="flex items-center space-x-4 hover:bg-gray-200 cursor-pointer"                       onClick={() => handleFriendClick(friend, "people")}
+>
                     <img
                       src={friend.avatarUrl || "default-avatar.png"}
                       alt={`${friend.displayName}'s avatar`}
                       className="w-12 h-12 rounded-full"
                     />
                     <span className="text-lg">{friend.username}</span>
+
                   </li>
                 ))}
               </ul>
