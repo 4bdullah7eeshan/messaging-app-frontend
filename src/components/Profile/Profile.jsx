@@ -95,14 +95,25 @@ const ProfilePage = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setAvatar(file);
-    setAvatarPreview(URL.createObjectURL(file));
+    const maxFileSize = 500 * 1024; // 0.5 MB
+
+    if (file) {
+        if (file.size > maxFileSize) {
+          setMessage("File size exceeds 500 kB. Please upload a smaller file.");
+          setAvatarPreview("");
+        } else {
+          setAvatar(file);
+          setAvatarPreview(URL.createObjectURL(file));
+          setMessage("");
+        }
+      }
   };
 
   const handleCancelEdit = () => {
     setBio(user.bio || "");
     setDisplayName(user.displayName || "");
     setAvatarPreview(user.avatarUrl || "");
+    setMessage("");
     setIsEditing(false);
   };
 
@@ -197,7 +208,10 @@ const ProfilePage = () => {
               </>
             ) : (
               <button
-                onClick={() => setIsEditing(true)}
+                onClick={() => {
+                    setMessage("");
+                    setIsEditing(true);
+                }}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md"
               >
                 Edit Profile
@@ -207,7 +221,7 @@ const ProfilePage = () => {
 
           {/* Feedback Message */}
           {message && (
-            <p className="mt-4 text-center text-green-600">{message}</p>
+            <p className="mt-4 text-center text-black-600">{message}</p>
           )}
         </div>
       ) : (
