@@ -9,6 +9,8 @@ function Explore({ setSelectedProfile }) {
   const [groups, setGroups] = useState([]);
   const { user: authUser } = useAuth();
   const userId = authUser.id;
+  const [friendIds, setFriendIds] = useState([]); // Store friend IDs
+
 
 
 
@@ -31,8 +33,29 @@ function Explore({ setSelectedProfile }) {
       }
     };
 
+    const fetchFriends = async () => {
+        try {
+          const friendsResponse = await fetch(
+            `http://localhost:3000/friends/u/:userId`, 
+            
+            {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          });
+          if (!friendsResponse.ok) throw new Error("Failed to fetch friends");
+          const friendsData = await friendsResponse.json();
+          setFriendIds(friendsData.map((friend) => friend.id)); // Save friend IDs
+
+        } catch (err) {
+          console.error(err);
+        } 
+      };
+  
+
     fetchUsers();
     fetchGroups();
+    fetchFriends();
   }, []);
 
   // Handle tab change
@@ -73,7 +96,7 @@ function Explore({ setSelectedProfile }) {
       {activeTab === "people" ? (
         <div className="flex-1 overflow-y-auto">
           {users
-          .filter((user) => user.id !== userId)
+          .filter((user) => user.id !== userId && !friendIds.includes(user.id))
           .map((user) => (
             <div
               key={user.id}
