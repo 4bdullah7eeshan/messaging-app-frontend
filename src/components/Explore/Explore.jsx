@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
 
-
 function Explore({ setSelectedProfile }) {
   const [activeTab, setActiveTab] = useState("people");
   const [users, setUsers] = useState([]);
@@ -12,11 +11,12 @@ function Explore({ setSelectedProfile }) {
   const [friendIds, setFriendIds] = useState([]);
   const [pendingRequestIds, setPendingRequestIds] = useState([]);
 
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/users");
+        const response = await axios.get(
+          "https://messaging-app-backend-kwd9.onrender.com/users"
+        );
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -25,7 +25,9 @@ function Explore({ setSelectedProfile }) {
 
     const fetchGroups = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/groups");
+        const response = await axios.get(
+          "https://messaging-app-backend-kwd9.onrender.com/groups"
+        );
         setGroups(response.data);
       } catch (error) {
         console.error("Error fetching groups:", error);
@@ -33,47 +35,47 @@ function Explore({ setSelectedProfile }) {
     };
 
     const fetchFriends = async () => {
-        try {
-          const friendsResponse = await fetch(
-            `http://localhost:3000/friends/u/:userId`, 
-            
-            {
+      try {
+        const friendsResponse = await fetch(
+          `https://messaging-app-backend-kwd9.onrender.com/friends/u/:userId`,
+
+          {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             },
-          });
-          if (!friendsResponse.ok) throw new Error("Failed to fetch friends");
-          const friendsData = await friendsResponse.json();
-          setFriendIds(friendsData.map((friend) => friend.id)); // Save friend IDs
+          }
+        );
+        if (!friendsResponse.ok) throw new Error("Failed to fetch friends");
+        const friendsData = await friendsResponse.json();
+        setFriendIds(friendsData.map((friend) => friend.id));
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-        } catch (err) {
-          console.error(err);
-        } 
-      };
-
-      const fetchFriendRequests = async () => {
-        try {
-          const response = await axios.get(`http://localhost:3000/friend_requests/user/:userId`, {
+    const fetchFriendRequests = async () => {
+      try {
+        const response = await axios.get(
+          `https://messaging-app-backend-kwd9.onrender.com/friend_requests/user/:userId`,
+          {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             },
-          });
-      
-          const { incomingRequests, outgoingRequests } = response.data;
-      
-          // Combine user IDs from incoming and outgoing requests
-          const requestIds = [
-            ...incomingRequests.map((req) => req.user.id), // Sender of incoming requests
-            ...outgoingRequests.map((req) => req.friend.id), // Receiver of outgoing requests
-          ];
-      
-          setPendingRequestIds(requestIds); // Update state with IDs
-        } catch (err) {
-          console.error("Error fetching friend requests:", err);
-        }
-      };
-      
-  
+          }
+        );
+
+        const { incomingRequests, outgoingRequests } = response.data;
+
+        const requestIds = [
+          ...incomingRequests.map((req) => req.user.id),
+          ...outgoingRequests.map((req) => req.friend.id),
+        ];
+
+        setPendingRequestIds(requestIds);
+      } catch (err) {
+        console.error("Error fetching friend requests:", err);
+      }
+    };
 
     fetchUsers();
     fetchGroups();
@@ -81,12 +83,10 @@ function Explore({ setSelectedProfile }) {
     fetchFriendRequests();
   }, []);
 
-  // Handle tab change
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  // Handle user/group click
   const handleItemClick = (item, type) => {
     setSelectedProfile({ item, type });
   };
@@ -119,16 +119,21 @@ function Explore({ setSelectedProfile }) {
       {activeTab === "people" ? (
         <div className="flex-1 overflow-y-auto">
           {users
-          .filter((user) => user.id !== userId && !friendIds.includes(user.id) && !pendingRequestIds.includes(user.id))
-          .map((user) => (
-            <div
-              key={user.id}
-              className="p-2 hover:bg-gray-200 rounded cursor-pointer"
-              onClick={() => handleItemClick(user, "people")}
-            >
-              {user.username}
-            </div>
-          ))}
+            .filter(
+              (user) =>
+                user.id !== userId &&
+                !friendIds.includes(user.id) &&
+                !pendingRequestIds.includes(user.id)
+            )
+            .map((user) => (
+              <div
+                key={user.id}
+                className="p-2 hover:bg-gray-200 rounded cursor-pointer"
+                onClick={() => handleItemClick(user, "people")}
+              >
+                {user.username}
+              </div>
+            ))}
         </div>
       ) : (
         <div className="flex-1 flex items-center justify-center text-gray-500 text-lg">

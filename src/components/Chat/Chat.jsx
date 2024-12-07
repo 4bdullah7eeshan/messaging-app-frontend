@@ -3,9 +3,9 @@ import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
 
 function Chat({ setSelectedChat, setChatList }) {
-  const [searchTerm, setSearchTerm] = useState(""); // State for the search input
+  const [searchTerm, setSearchTerm] = useState("");
   const { user: authUser } = useAuth();
-  const [chats, setChats] = useState([]); // State to store chats locally
+  const [chats, setChats] = useState([]);
 
   const userId = authUser.id;
 
@@ -13,16 +13,16 @@ function Chat({ setSelectedChat, setChatList }) {
     const fetchChats = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/chats/user/${userId}`,
+          `https://messaging-app-backend-kwd9.onrender.com/chats/user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             },
           }
         );
-        const validChats = response.data.chats.filter((chat) => chat.receiver); // Remove invalid chats
-    setChats(validChats);
-    setChatList(validChats);
+        const validChats = response.data.chats.filter((chat) => chat.receiver);
+        setChats(validChats);
+        setChatList(validChats);
       } catch (error) {
         console.error("Error fetching chats:", error);
       }
@@ -34,8 +34,10 @@ function Chat({ setSelectedChat, setChatList }) {
   // Filter chats based on the search term
   const filteredChats = chats.filter(
     (chat) =>
-      chat.receiver &&
-      chat.receiver.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (chat.receiver &&
+        chat.receiver.username
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())) ||
       (chat.receiver.displayName &&
         chat.receiver.displayName
           .toLowerCase()

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 
-
 const Friends = ({ setSelectedProfile }) => {
   const [friends, setFriends] = useState([]);
   const [incomingRequests, setIncomingRequests] = useState([]);
@@ -14,19 +13,19 @@ const Friends = ({ setSelectedProfile }) => {
   const { user: authUser } = useAuth();
   const userId = authUser.id;
 
-
   useEffect(() => {
     const fetchFriends = async () => {
       try {
         setLoading(true);
         const friendsResponse = await fetch(
-          `http://localhost:3000/friends/u/:userId`, 
-          
+          `https://messaging-app-backend-kwd9.onrender.com/friends/u/:userId`,
+
           {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        });
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          }
+        );
         if (!friendsResponse.ok) throw new Error("Failed to fetch friends");
         const friendsData = await friendsResponse.json();
         setFriends(friendsData);
@@ -42,7 +41,7 @@ const Friends = ({ setSelectedProfile }) => {
       try {
         setLoading(true);
         const requestsResponse = await fetch(
-          `http://localhost:3000/friend_requests/user/:userId`,
+          `https://messaging-app-backend-kwd9.onrender.com/friend_requests/user/:userId`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -63,8 +62,7 @@ const Friends = ({ setSelectedProfile }) => {
       }
     };
 
-    Promise.all([fetchFriends(), fetchFriendRequests()])
-    .finally(() => {
+    Promise.all([fetchFriends(), fetchFriendRequests()]).finally(() => {
       setLoadingFriends(false);
       setLoadingRequests(false);
     });
@@ -73,7 +71,7 @@ const Friends = ({ setSelectedProfile }) => {
   const handleAcceptRequest = async (requestId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/friend_requests/accept/${requestId}`,
+        `https://messaging-app-backend-kwd9.onrender.com/friend_requests/accept/${requestId}`,
         {
           method: "PATCH",
           headers: {
@@ -99,7 +97,7 @@ const Friends = ({ setSelectedProfile }) => {
   const handleRejectRequest = async (requestId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/friend_requests/reject/${requestId}`,
+        `https://messaging-app-backend-kwd9.onrender.com/friend_requests/reject/${requestId}`,
         {
           method: "DELETE",
           headers: {
@@ -121,7 +119,7 @@ const Friends = ({ setSelectedProfile }) => {
   const handleCancelRequest = async (requestId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/friend_requests/send/${requestId}`,
+        `https://messaging-app-backend-kwd9.onrender.com/friend_requests/send/${requestId}`,
         {
           method: "DELETE",
           headers: {
@@ -143,7 +141,6 @@ const Friends = ({ setSelectedProfile }) => {
   const handleFriendClick = (item, type) => {
     setSelectedProfile({ item, type });
   };
-  
 
   return (
     <div className="p-4 space-y-6">
@@ -186,18 +183,25 @@ const Friends = ({ setSelectedProfile }) => {
 
           {activeTab === "friends" && (
             <section>
-              <h2 className="text-xl font-semibold text-gray-800">Your Friends</h2>
+              <h2 className="text-xl font-semibold text-gray-800">
+                Your Friends
+              </h2>
               <ul className="space-y-4">
                 {friends.map((friend) => (
-                  <li key={friend.id} className="flex items-center space-x-4 hover:bg-gray-200 cursor-pointer"                       onClick={() => handleFriendClick(friend, "people")}
->
+                  <li
+                    key={friend.id}
+                    className="flex items-center space-x-4 hover:bg-gray-200 cursor-pointer"
+                    onClick={() => handleFriendClick(friend, "people")}
+                  >
                     <img
-                      src={friend.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
+                      src={
+                        friend.avatarUrl ||
+                        "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"
+                      }
                       alt={`${friend.displayName}'s avatar`}
                       className="w-12 h-12 rounded-full"
                     />
                     <span className="text-lg">{friend.username}</span>
-
                   </li>
                 ))}
               </ul>
@@ -216,11 +220,19 @@ const Friends = ({ setSelectedProfile }) => {
                   {incomingRequests.map((request) => (
                     <li
                       key={request.id}
-                      className="flex items-center justify-between space-x-4"  
+                      className="flex items-center justify-between space-x-4"
                     >
-                      <div className="flex items-center space-x-4 hover:bg-gray-200 cursor-pointer w-100" onClick={() => handleFriendClick(request.user, "people")}>
+                      <div
+                        className="flex items-center space-x-4 hover:bg-gray-200 cursor-pointer w-100"
+                        onClick={() =>
+                          handleFriendClick(request.user, "people")
+                        }
+                      >
                         <img
-                          src={request.user.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
+                          src={
+                            request.user.avatarUrl ||
+                            "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"
+                          }
                           alt={`${request.user.displayName}'s avatar`}
                           className="w-12 h-12 rounded-full"
                         />
@@ -259,16 +271,23 @@ const Friends = ({ setSelectedProfile }) => {
                   {outgoingRequests.map((request) => (
                     <li
                       key={request.id}
-                      className="flex items-center justify-between space-x-4 hover:bg-gray-200 cursor-pointer" 
-                      onClick={() => handleFriendClick(request.friend, "people")}
+                      className="flex items-center justify-between space-x-4 hover:bg-gray-200 cursor-pointer"
+                      onClick={() =>
+                        handleFriendClick(request.friend, "people")
+                      }
                     >
-                      <div className="flex items-center space-x-4" >
+                      <div className="flex items-center space-x-4">
                         <img
-                          src={request.friend.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
+                          src={
+                            request.friend.avatarUrl ||
+                            "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"
+                          }
                           alt={`${request.friend.displayName}'s avatar`}
                           className="w-12 h-12 rounded-full"
                         />
-                        <span className="text-lg">{request.friend.username}</span>
+                        <span className="text-lg">
+                          {request.friend.username}
+                        </span>
                       </div>
                       {/* <div className="space-x-2">
                         <button onClick={() => handleCancelRequest(request.id)} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">

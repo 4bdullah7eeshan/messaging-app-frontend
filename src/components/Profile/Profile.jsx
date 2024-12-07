@@ -16,7 +16,7 @@ const ProfilePage = () => {
     const fetchUser = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/users/${authUser.id}`
+          `https://messaging-app-backend-kwd9.onrender.com/users/${authUser.id}`
         );
         if (!response.ok) throw new Error("Failed to fetch user data");
 
@@ -37,7 +37,7 @@ const ProfilePage = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:3000/users/${authUser.id}/textual`,
+        `https://messaging-app-backend-kwd9.onrender.com/users/${authUser.id}/textual`,
         {
           method: "PATCH",
           headers: {
@@ -69,7 +69,7 @@ const ProfilePage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/users/${authUser.id}/avatar`,
+        `https://messaging-app-backend-kwd9.onrender.com/users/${authUser.id}/avatar`,
         {
           method: "PATCH",
           body: formData,
@@ -98,15 +98,15 @@ const ProfilePage = () => {
     const maxFileSize = 500 * 1024; // 0.5 MB
 
     if (file) {
-        if (file.size > maxFileSize) {
-          setMessage("File size exceeds 500 kB. Please upload a smaller file.");
-          setAvatarPreview("");
-        } else {
-          setAvatar(file);
-          setAvatarPreview(URL.createObjectURL(file));
-          setMessage("");
-        }
+      if (file.size > maxFileSize) {
+        setMessage("File size exceeds 500 kB. Please upload a smaller file.");
+        setAvatarPreview("");
+      } else {
+        setAvatar(file);
+        setAvatarPreview(URL.createObjectURL(file));
+        setMessage("");
       }
+    }
   };
 
   const handleCancelEdit = () => {
@@ -126,7 +126,10 @@ const ProfilePage = () => {
             {/* Avatar Section */}
             <div className="flex flex-col items-center">
               <img
-                src={avatarPreview || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
+                src={
+                  avatarPreview ||
+                  "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"
+                }
                 alt="User Avatar"
                 className="w-40 h-40 rounded-full object-cover shadow-lg"
               />
@@ -151,7 +154,7 @@ const ProfilePage = () => {
 
             {/* Profile Info */}
             <div className="mt-6 md:mt-0 md:ml-10 flex flex-col justify-center align-center">
-            <p className="text-gray-700">
+              <p className="text-gray-700">
                 <strong>Username:</strong> {user.username}
               </p>
               <p className="text-gray-700">
@@ -211,8 +214,8 @@ const ProfilePage = () => {
             ) : (
               <button
                 onClick={() => {
-                    setMessage("");
-                    setIsEditing(true);
+                  setMessage("");
+                  setIsEditing(true);
                 }}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md"
               >

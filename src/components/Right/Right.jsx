@@ -16,7 +16,6 @@ function Right({
   const userId = authUser.id;
 
   const [isChatActive, setIsChatActive] = useState(false);
-  const [shouldUpdateProfile, setShouldUpdateProfile] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
   const [friendRequestSent, setFriendRequestSent] = useState({});
   const [friendRequestStatus, setFriendRequestStatus] = useState("");
@@ -42,7 +41,7 @@ function Right({
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/friends/u/f/${item.id}`,
+          `https://messaging-app-backend-kwd9.onrender.com/friends/u/f/${item.id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -64,7 +63,7 @@ function Right({
       if (!item || !item.id) return;
   
       try {
-        const response = await axios.get("http://localhost:3000/friend_requests/user/:userId", {
+        const response = await axios.get("https://messaging-app-backend-kwd9.onrender.com/friend_requests/user/:userId", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
@@ -72,7 +71,6 @@ function Right({
   
         const { incomingRequests, outgoingRequests } = response.data;
   
-        // Check if a request has been sent to the user
         const isSent = outgoingRequests.some((req) => req.friendId === item.id);
         const isReceived = incomingRequests.some((req) => req.userId === item.id);
   
@@ -115,7 +113,7 @@ function Right({
         const participantIds = [userId, item.id];
 
         const response = await axios.post(
-          "http://localhost:3000/chats/new",
+          "https://messaging-app-backend-kwd9.onrender.com/chats/new",
           { participantIds },
           {
             headers: {
@@ -139,7 +137,7 @@ function Right({
   const handleSendFriendRequest = async () => {
     try {
       await axios.post(
-        `http://localhost:3000/friend_requests/send/${item.id}`,
+        `https://messaging-app-backend-kwd9.onrender.com/friend_requests/send/${item.id}`,
         {},
         {
           headers: {
@@ -148,7 +146,7 @@ function Right({
         }
       );
       setFriendRequestSent((prev) => ({ ...prev, [item.id]: true }));
-      setFriendRequestStatus("Sent"); // Update the status to "Sent"
+      setFriendRequestStatus("Sent");
 
     } catch (error) {
       console.error("Error sending friend request:", error);

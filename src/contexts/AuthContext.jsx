@@ -1,19 +1,13 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import PropTypes from "prop-types";
+
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Track loading state
+  const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("authToken");
-  //   if (token) {
-  //     const storedUser = JSON.parse(localStorage.getItem("user"));
-  //     setUser(storedUser);
-  //   }
-  //   setLoading(false);
-  // }, []);
   const validateToken = async () => {
     const token = localStorage.getItem("authToken");
     console.log("Retrieved token:", token);
@@ -24,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/auth/verify-token", {
+      const response = await fetch("https://messaging-app-backend-kwd9.onrender.com/auth/verify-token", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -61,7 +55,7 @@ export const AuthProvider = ({ children }) => {
       console.log(token);
 
       if (token) {
-        const response = await fetch("http://localhost:3000/auth/sign-out", {
+        const response = await fetch("https://messaging-app-backend-kwd9.onrender.com/auth/sign-out", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -88,5 +82,10 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 
 export const useAuth = () => useContext(AuthContext);

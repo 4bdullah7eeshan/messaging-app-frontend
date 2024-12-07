@@ -5,20 +5,18 @@ import Layout from "./components/Layout/Layout";
 import SignIn from "./pages/SignIn";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
-import { element } from "prop-types";
-
 const routes = [
   {
-    path: "/", // This will match the root path
+    path: "/",
     element: (
       <ProtectedRoute>
         <App />
       </ProtectedRoute>
-    ), // Render App here if needed
+    ),
   },
   {
     path: "/",
-    element: <Layout />, // Use the layout here
+    element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
       {

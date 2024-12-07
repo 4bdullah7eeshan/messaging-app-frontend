@@ -5,11 +5,10 @@ import Right from "../Right/Right";
 
 function MainApp() {
   const [activeSection, setActiveSection] = useState("messages");
-  const [chatList, setChatList] = useState([]); // Maintain a list of chats
+  const [chatList, setChatList] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null);
 
-  // Add a new chat to the list and select it
   const handleChatCreate = (newChat) => {
     setChatList((prevChats) => [...prevChats, newChat]);
     setSelectedChat(newChat);

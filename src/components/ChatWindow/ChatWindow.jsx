@@ -22,7 +22,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
 
       try {
         const response = await axios.get(
-          `http://localhost:3000/chats/m/${answer}`,
+          `https://messaging-app-backend-kwd9.onrender.com/chats/m/${answer}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -47,7 +47,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
         )?.id;
         if (receiverId) {
           const response = await axios.get(
-            `http://localhost:3000/users/${receiverId}`,
+            `https://messaging-app-backend-kwd9.onrender.com/users/${receiverId}`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -68,14 +68,6 @@ function ChatWindow({ selectedChat, currentUserId }) {
     fetchReceiver();
   }, [selectedChat, currentUserId, answer]);
 
-  // const handleFileChange = (e) => {
-  //   const selectedFile = e.target.files[0];
-  //   if (selectedFile) {
-  //     setFile(selectedFile);
-  //     setFilePreview(URL.createObjectURL(selectedFile)); // Create a local URL for the preview
-  //   }
-  // };
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
@@ -85,21 +77,19 @@ function ChatWindow({ selectedChat, currentUserId }) {
           type: "error",
           message: "File size exceeds the 1MB limit.",
         });
-        setFile(null); // Clear the file
+        setFile(null);
         return;
       }
 
       setFile(file);
-      // Handle image file preview
+
       if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onloadend = () => {
           setFilePreview({ type: "image", url: reader.result });
         };
         reader.readAsDataURL(file);
-      }
-      // Handle document preview (show file name for non-image files)
-      else if (
+      } else if (
         file.type === "application/pdf" ||
         file.type === "application/msword" ||
         file.type ===
@@ -107,7 +97,6 @@ function ChatWindow({ selectedChat, currentUserId }) {
       ) {
         setFilePreview({ type: "document", name: file.name });
       } else {
-        // For unsupported file types, you can add additional logic or show a generic message
         setFilePreview({ type: "unknown", name: file.name });
       }
     }
@@ -116,7 +105,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
   const sendMessage = async () => {
     if (!newMessage.trim() && !file) return;
 
-    setIsSending(true); // Set loading state to true when message is being sent
+    setIsSending(true);
 
     let imageUrl = null;
 
@@ -129,7 +118,7 @@ function ChatWindow({ selectedChat, currentUserId }) {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/chats/m/${answer}`,
+        `https://messaging-app-backend-kwd9.onrender.com/chats/m/${answer}`,
         formData,
         {
           headers: {

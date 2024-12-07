@@ -18,7 +18,7 @@ function SignIn() {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/auth/sign-in", {
+      const response = await fetch("https://messaging-app-backend-kwd9.onrender.com/auth/sign-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -48,7 +48,7 @@ function SignIn() {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/auth/sign-in", {
+      const response = await fetch("https://messaging-app-backend-kwd9.onrender.com/auth/sign-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(demoCredentials),
