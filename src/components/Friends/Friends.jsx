@@ -192,7 +192,7 @@ const Friends = ({ setSelectedProfile }) => {
                   <li key={friend.id} className="flex items-center space-x-4 hover:bg-gray-200 cursor-pointer"                       onClick={() => handleFriendClick(friend, "people")}
 >
                     <img
-                      src={friend.avatarUrl || "default-avatar.png"}
+                      src={friend.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
                       alt={`${friend.displayName}'s avatar`}
                       className="w-12 h-12 rounded-full"
                     />
@@ -216,15 +216,14 @@ const Friends = ({ setSelectedProfile }) => {
                   {incomingRequests.map((request) => (
                     <li
                       key={request.id}
-                      className="flex items-center justify-between space-x-4"
+                      className="flex items-center justify-between space-x-4"  
                     >
-                      <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-4 hover:bg-gray-200 cursor-pointer w-100" onClick={() => handleFriendClick(request.user, "people")}>
                         <img
-                          src={request.user.avatarUrl || "default-avatar.png"}
+                          src={request.user.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
                           alt={`${request.user.displayName}'s avatar`}
                           className="w-12 h-12 rounded-full"
                         />
-                        <span className="text-lg">{request.user.displayName}</span>
                         <span className="text-lg">{request.user.username}</span>
                       </div>
                       <div className="space-x-2">
@@ -234,12 +233,12 @@ const Friends = ({ setSelectedProfile }) => {
                         >
                           Accept
                         </button>
-                        <button
+                        {/* <button
                           onClick={() => handleRejectRequest(request.id)}
                           className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                         >
                           Decline
-                        </button>
+                        </button> */}
                       </div>
                     </li>
                   ))}
@@ -260,22 +259,22 @@ const Friends = ({ setSelectedProfile }) => {
                   {outgoingRequests.map((request) => (
                     <li
                       key={request.id}
-                      className="flex items-center justify-between space-x-4"
+                      className="flex items-center justify-between space-x-4 hover:bg-gray-200 cursor-pointer" 
+                      onClick={() => handleFriendClick(request.friend, "people")}
                     >
-                      <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-4" >
                         <img
-                          src={request.friend.avatarUrl || "default-avatar.png"}
+                          src={request.friend.avatarUrl || "https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"}
                           alt={`${request.friend.displayName}'s avatar`}
                           className="w-12 h-12 rounded-full"
                         />
-                        <span className="text-lg">{request.friend.displayName}</span>
                         <span className="text-lg">{request.friend.username}</span>
                       </div>
-                      <div className="space-x-2">
+                      {/* <div className="space-x-2">
                         <button onClick={() => handleCancelRequest(request.id)} className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
                           Cancel Request
                         </button>
-                      </div>
+                      </div> */}
                     </li>
                   ))}
                 </ul>

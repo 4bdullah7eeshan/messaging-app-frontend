@@ -18,7 +18,9 @@ function Right({
   const [isChatActive, setIsChatActive] = useState(false);
   const [shouldUpdateProfile, setShouldUpdateProfile] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
-  const [friendRequestSent, setFriendRequestSent] = useState(false);
+  const [friendRequestSent, setFriendRequestSent] = useState({});
+  const [friendRequestStatus, setFriendRequestStatus] = useState("");
+
 
   useEffect(() => {
     if (selectedChat) {
@@ -56,6 +58,39 @@ function Right({
 
     checkFriendshipStatus();
   }, [item]);
+
+  useEffect(() => {
+    const fetchFriendRequestStatus = async () => {
+      if (!item || !item.id) return;
+  
+      try {
+        const response = await axios.get("http://localhost:3000/friend_requests/user/:userId", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        });
+  
+        const { incomingRequests, outgoingRequests } = response.data;
+  
+        // Check if a request has been sent to the user
+        const isSent = outgoingRequests.some((req) => req.friendId === item.id);
+        const isReceived = incomingRequests.some((req) => req.userId === item.id);
+  
+        if (isSent) {
+          setFriendRequestStatus("Sent");
+        } else if (isReceived) {
+          setFriendRequestStatus("Received");
+        } else {
+          setFriendRequestStatus("None");
+        }
+      } catch (error) {
+        console.error("Error fetching friend request status:", error);
+      }
+    };
+  
+    fetchFriendRequestStatus();
+  }, [item]);
+  
 
   const handleStartChat = async () => {
     console.log("handleStartChat triggered");
@@ -112,7 +147,9 @@ function Right({
           },
         }
       );
-      setFriendRequestSent(true);
+      setFriendRequestSent((prev) => ({ ...prev, [item.id]: true }));
+      setFriendRequestStatus("Sent"); // Update the status to "Sent"
+
     } catch (error) {
       console.error("Error sending friend request:", error);
     }
@@ -225,8 +262,10 @@ function Right({
                       </div>
                     </div>
                   </div>
-                ) : friendRequestSent ? (
+                ) : friendRequestStatus === "Sent" ? (
                   <p className="text-gray-600 mt-2">Friend request sent!</p>
+                ) : friendRequestStatus === "Received" ? (
+                  <p className="text-gray-600 mt-2">Friend request received!</p>
                 ) : (
                   <button
                     onClick={handleSendFriendRequest}

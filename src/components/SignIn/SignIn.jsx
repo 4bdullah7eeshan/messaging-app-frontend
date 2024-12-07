@@ -39,6 +39,35 @@ function SignIn() {
     }
   };
 
+  const handleDemoLogin = async () => {
+    setError(null);
+
+    const demoCredentials = {
+      email: "demo@demo.com",
+      password: "demo123",
+    };
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/sign-in", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(demoCredentials),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(errorData || "Demo login failed");
+      }
+
+      const data = await response.json();
+      localStorage.setItem("authToken", data.token);
+      login(data.user);
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -108,6 +137,14 @@ function SignIn() {
               Sign Up
             </a>
           </p>
+        </div>
+        <div className="mt-6 text-center">
+          <button
+            onClick={handleDemoLogin}
+            className="mt-4 w-full py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+          >
+            Login as Demo
+          </button>
         </div>
       </div>
     </main>

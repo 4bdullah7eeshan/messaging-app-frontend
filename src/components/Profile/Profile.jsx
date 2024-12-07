@@ -118,11 +118,11 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg flex flex-col items-center justify-center align-center overflow-auto max-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center">Profile</h1>
       {authUser && user ? (
         <div>
-          <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+          <div className="flex flex-col items-center justify-center mb-6">
             {/* Avatar Section */}
             <div className="flex flex-col items-center">
               <img
@@ -131,7 +131,7 @@ const ProfilePage = () => {
                 className="w-40 h-40 rounded-full object-cover shadow-lg"
               />
               {isEditing && (
-                <div className="mt-4">
+                <div className="mt-4 flex flex-col justify-center align-center mb-4">
                   <input
                     type="file"
                     onChange={handleFileChange}
@@ -150,8 +150,10 @@ const ProfilePage = () => {
             </div>
 
             {/* Profile Info */}
-            <div className="mt-6 md:mt-0 md:ml-10">
-              <h2 className="text-xl font-semibold mb-2">Profile Information</h2>
+            <div className="mt-6 md:mt-0 md:ml-10 flex flex-col justify-center align-center">
+            <p className="text-gray-700">
+                <strong>Username:</strong> {user.username}
+              </p>
               <p className="text-gray-700">
                 <strong>Email:</strong> {user.email}
               </p>

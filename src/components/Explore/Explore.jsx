@@ -9,7 +9,9 @@ function Explore({ setSelectedProfile }) {
   const [groups, setGroups] = useState([]);
   const { user: authUser } = useAuth();
   const userId = authUser.id;
-  const [friendIds, setFriendIds] = useState([]); // Store friend IDs
+  const [friendIds, setFriendIds] = useState([]);
+  const [pendingRequestIds, setPendingRequestIds] = useState([]);
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -48,11 +50,35 @@ function Explore({ setSelectedProfile }) {
           console.error(err);
         } 
       };
+
+      const fetchFriendRequests = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/friend_requests/user/:userId`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          });
+      
+          const { incomingRequests, outgoingRequests } = response.data;
+      
+          // Combine user IDs from incoming and outgoing requests
+          const requestIds = [
+            ...incomingRequests.map((req) => req.user.id), // Sender of incoming requests
+            ...outgoingRequests.map((req) => req.friend.id), // Receiver of outgoing requests
+          ];
+      
+          setPendingRequestIds(requestIds); // Update state with IDs
+        } catch (err) {
+          console.error("Error fetching friend requests:", err);
+        }
+      };
+      
   
 
     fetchUsers();
     fetchGroups();
     fetchFriends();
+    fetchFriendRequests();
   }, []);
 
   // Handle tab change
@@ -93,7 +119,7 @@ function Explore({ setSelectedProfile }) {
       {activeTab === "people" ? (
         <div className="flex-1 overflow-y-auto">
           {users
-          .filter((user) => user.id !== userId && !friendIds.includes(user.id))
+          .filter((user) => user.id !== userId && !friendIds.includes(user.id) && !pendingRequestIds.includes(user.id))
           .map((user) => (
             <div
               key={user.id}
