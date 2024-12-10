@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
 
   const validateToken = async () => {
     const token = localStorage.getItem("authToken");
-    console.log("Retrieved token:", token);
 
     if (!token) {
       setLoading(false);
@@ -22,14 +21,12 @@ export const AuthProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("Verify Token Response Status:", response.status);
 
       if (!response.ok) {
         throw new Error("Token invalid");
       }
 
       const data = await response.json();
-      console.log("User Data from Verify Token:", data.user);
 
       setUser(data.user);
     } catch (error) {
@@ -52,7 +49,6 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       const token = localStorage.getItem("authToken");
-      console.log(token);
 
       if (token) {
         const response = await fetch("https://messaging-app-backend-kwd9.onrender.com/auth/sign-out", {
