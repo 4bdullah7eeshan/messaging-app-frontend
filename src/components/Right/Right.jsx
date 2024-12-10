@@ -91,7 +91,6 @@ function Right({
   
 
   const handleStartChat = async () => {
-    console.log("handleStartChat triggered");
     const existingChat =
       Array.isArray(chatList) &&
       chatList.find((chat) => {
@@ -100,7 +99,6 @@ function Right({
         return item.id === chatParticipantIds;
       });
 
-    console.log("Existing Chat:", existingChat);
 
     if (existingChat) {
       console.log("Existing chat found, selecting it");
@@ -123,7 +121,6 @@ function Right({
         );
 
         const newChat = response.data.chat;
-        console.log(newChat);
         addChatToList(newChat);
         setSelectedChat(newChat);
         setIsChatActive(true);
