@@ -72,7 +72,3 @@ npm run preview
 ## Background
 
 This project was created as part of [The Odin Project](https://www.theodinproject.com/)'s [Messaging App](https://www.theodinproject.com/lessons/nodejs-messaging-app) project.
-
-
-
-
